@@ -41,8 +41,9 @@ class CreatePostsTest extends FeatureTestCase
             ->visit(route('posts.create'))
             ->press('Published')
             ->seePageIs(route('posts.create'))
-            ->seeInElement('#field_title .help-block', 'The title field is required.')
-            ->seeInElement('#field_content .help-block', 'The content field is required.');
-
+            ->seeErrors([
+                'title' => 'The title field is required.',
+                'content' => 'The content field is required.'
+            ]);
     }
 }
