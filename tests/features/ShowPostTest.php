@@ -16,9 +16,28 @@ class ShowPostTest extends FeatureTestCase
 
         $user->posts()->save($post);
 
-        $this->visit(route('posts.show', $post))
+        $this->visit($post->url)
             ->seeInElement('h1', $post->title)
             ->see($post->content)
             ->see($post->user->name);
+    }
+
+    public function test_old_urls_are_redirected()
+    {
+        $post = factory(\App\Post::class)->make([
+            'title' => 'This is the title of the post.',
+            'content' => 'This is the content of the post'
+        ]);
+
+        $user = $this->defaultUser();
+
+        $user->posts()->save($post);
+
+        $url = $post->url;
+
+        $post->update(['title' => 'This is the new title.']);
+
+        $this->visit($url)
+            ->seePageIs($post->url);
     }
 }
