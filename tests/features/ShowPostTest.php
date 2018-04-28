@@ -5,16 +5,15 @@ class ShowPostTest extends FeatureTestCase
 
     public function test_a_user_can_see_the_post_details()
     {
-        $post = factory(\App\Post::class)->make([
-            'title' => 'This is the title of the post.',
-            'content' => 'This is the content of the post'
-        ]);
-
         $user = $this->defaultUser([
             'name' => 'Dario Nahuel Rodriguez'
         ]);
 
-        $user->posts()->save($post);
+        $post = $this->createPost([
+            'title' => 'This is the title of the post.',
+            'content' => 'This is the content of the post',
+            'user_id' => $user->id
+        ]);
 
         $this->visit($post->url)
             ->seeInElement('h1', $post->title)
@@ -24,14 +23,10 @@ class ShowPostTest extends FeatureTestCase
 
     public function test_old_urls_are_redirected()
     {
-        $post = factory(\App\Post::class)->make([
+        $post = $this->createPost([
             'title' => 'This is the title of the post.',
             'content' => 'This is the content of the post'
         ]);
-
-        $user = $this->defaultUser();
-
-        $user->posts()->save($post);
 
         $url = $post->url;
 
