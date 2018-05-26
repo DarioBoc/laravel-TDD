@@ -10,11 +10,23 @@ class Comment extends Model
 
     public function post()
     {
-        $this->belongsTo(Post::class);
+        return $this->belongsTo(Post::class);
     }
 
     public function user()
     {
-        $this->belongsTo(User::class);
+        return $this->belongsTo(User::class);
+    }
+
+    public function markAsAnwer()
+    {
+        $this->post->pending = false;
+        $this->post->answer_id = $this->id;
+        $this->post->save();
+    }
+
+    public function getAnswerAttribute()
+    {
+        return $this->id === $this->post->answer_id;
     }
 }
