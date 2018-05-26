@@ -13,4 +13,11 @@ class CommentController extends Controller
 
         return redirect($post->url);
     }
+
+    public function accept(Request $request, Comment $comment)
+    {
+        $comment->markAsAnwer();
+
+        return redirect($comment->post->url);
+    }
 }
