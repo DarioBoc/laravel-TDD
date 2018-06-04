@@ -19,9 +19,11 @@
     @foreach($post->lastComments as $comment)
         <article class="{{ $comment->answer ? 'answer' : ''}}">
             {{ $comment->comment }}
+            @if(Gate::allows('accept', $comment) && ! $comment->answer)
             {!! Form::open(['method' => 'POST', 'route' => ['comments.accept', $comment]]) !!}
             <button type="submit">Accept comment</button>
             {!! Form::close() !!}
+            @endif
         </article>
     @endforeach
 
